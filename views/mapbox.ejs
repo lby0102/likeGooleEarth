@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script src="./javascripts/myMapbox.js"></script>
+    <script src="./javascripts/mapbox-gl.js"></script>
+    <script src="./javascripts/jquery-3.1.1.min.js"></script>
+    <link href="./javascripts/mapbox-gl.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./javascripts/layui/css/layui.css" />
+    <script src="./javascripts/layui/layui.js"></script>
+    <title>My Mapbox start</title>
+
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+      }
+      .userInfo {
+        position: absolute;
+        top: 4%;
+        right: 2%;
+        background-color: rgb(0, 71, 104);
+        display: flex;
+        align-items: center;
+        color: white;
+        justify-content: center;
+        z-index: 500;
+      }
+      .userItem {
+        display: flex !important;
+        align-items: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <% if (user) { %>
+    <div class="userInfo">
+      <ul class="layui-nav layui-layout-right">
+        <li class="layui-nav-item" style="min-width: 100px;">
+          <a class="userItem">
+            <img src="./images/OIP.jpg" class="layui-nav-img" />
+            <%= user.name %>
+          </a>
+          <dl class="layui-nav-child">
+            <dd><a id="logout">退出</a></dd>
+          </dl>
+        </li>
+      </ul>
+    </div>
+    <% } else{ %>
+    <div class="userInfo">
+      <ul class="layui-nav layui-layout-right">
+        <li class="layui-nav-item" style="min-width: 100px;">
+          <a class="userItem">
+            未登录
+          </a>
+          <dl class="layui-nav-child">
+            <dd><a id="login">登录</a></dd>
+          </dl>
+        </li>
+      </ul>
+    </div>
+    <%}%>
+    <div id="map" style="width: 100%; height: 100%;"></div>
+  </body>
+  <script>
+    layui.use("element", function () {
+      var element = layui.element;
+    });
+
+    if (document.getElementById("login")) {
+      document.getElementById("login").onclick = function () {
+        console.log("login");
+        location.href = "login";
+      };
+    }
+    if (document.getElementById("logout")) {
+      document.getElementById("logout").onclick = function () {
+        $.ajax({
+          url: "/user/logout",
+          type: "get",
+          success: function (res, status) {
+            if (status === "success") {
+              location.href = "login";
+            }
+          },
+          error: function (error, status) {
+            if (status === "success") {
+              location.href = "login";
+            }
+          },
+        });
+      };
+    }
+
+    mapboxgl.accessToken =
+      "pk.eyJ1IjoibGJ5MDEwMiIsImEiOiJjanYyMjEwNDcyMGJoNDRwZmxyZDQ3ZjdmIn0.qXtiRarbRFMUbzuwlbmKiA";
+    var map = new mapboxgl.Map({
+      container: "map",
+      // style: 'mapbox://styles/mapbox/streets-v11',
+      style: MP.defaultStyle,
+      center: [118, 32],
+      zoom: 6,
+    });
+
+    // let url="http://127.0.0.1:3000/request/map?url=http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}";
+    let url =
+      // "http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}";
+      "https://www.google.cn/maps/vt?lyrs=s@804&gl=cn&x={x}&y={y}&z={z}";
+      
+    let id = "baseMap";
+    let source = {
+      type: "raster" /*数据源类型*/,
+      tileSize: 256 /*返回栅格图片尺寸，如果不添加该参数，默认为512*/,
+      tiles: [url] /*数据源请求地址URL，可以是多个*/,
+    };
+    let layerOpt = {
+      id: id,
+      type: "raster",
+      source: id,
+      layout: {
+        visibility: "visible",
+      },
+      paint: {
+        "raster-opacity": 1,
+      },
+      minzoom: 0,
+      maxzoom: 22,
+    };
+    map.on("load", function () {
+      map.addSource(id, source);
+      map.addLayer(layerOpt);
+    });
+  </script>
+</html>

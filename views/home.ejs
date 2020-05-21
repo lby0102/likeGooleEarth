@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOME</title>
+</head>
+<style>
+    html,body,.fullPage{
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        
+    }
+    .fullPage{
+         background: url("./images/homebg.jpg");
+         display: flex;
+         justify-content: center;
+         align-items: center;
+    }
+    .item{
+        width: 200px;
+        height: 100px;
+        margin: 20px;background-color: rgba(27, 85, 177,0.8);
+        cursor: pointer;
+        font-size: 20px;
+        color: white;
+        line-height: 100px;
+        text-align: center;
+        border: 2px solid rgba(27, 85, 177,0);
+    }
+    .item:hover{
+        border: 2px solid rgba(27, 85, 177,1);
+    }
+
+</style>
+<body>
+    <div class="fullPage">
+        <div class="item" id="mapboxPage">MapBox地图</div>
+        <div class="item">Todo...</div>
+    </div>
+</body>
+<script>
+
+if(document.getElementById("mapboxPage")){
+    document.getElementById("mapboxPage").onclick=function(){
+        location.href='mapbox'
+    }
+}
+
+</script>
+</html>

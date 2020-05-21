@@ -1,0 +1,131 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-04-20 10:56:42
+ * @LastEditTime: 2020-04-24 09:13:52
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \myTest\public\login.html
+ -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+
+    <link rel="stylesheet" href="./javascripts/layui/css/layui.css">
+    <script src="./javascripts/layui/layui.js"></script>
+    <script src="./javascripts/jquery-3.1.1.min.js"></script>
+    <!-- <script src="./javascripts/layui/lay/modules/layer.js"></script> -->
+    <style>
+
+    html,body,.fullPage{
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        
+    }
+    .fullPage{
+         background: url("./images/loginbg.jpg") no-repeat;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         background-size: 100% 100%;
+    }
+
+      .user-form{
+        width: 360px;
+        margin-left: -80px;
+        margin-top: -350px
+      }
+      .user-label{
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 18px;
+        font-family: 微软雅黑;
+      }
+      .user-input{
+        background: none;
+        border-radius: 5px;
+        border-color: #008bfd;
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .user-login{
+        background-color: #008bfd;
+        margin-right: 90px;
+      }
+      .layui-form-item-self{
+        margin: 30px 0;
+      }
+    </style>
+  </head>
+  <body>
+  <div class="fullPage">
+
+    <form class="layui-form user-form" action="">
+      <div class="layui-form-item layui-form-item-self">
+        <label class="layui-form-label user-label">账  户</label>
+        <div class="layui-input-block">
+          <input  type="text" name="username" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="user-input layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item layui-form-item-self">
+        <label class="layui-form-label user-label">密  码</label>
+        <div class="layui-input-block" >
+          <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="user-input layui-input">
+        </div>
+      </div>
+      
+      <div class="layui-form-item layui-form-item-self" style="margin-top: 50px;">
+        <div class="layui-input-block">
+          <button class="layui-btn user-login" lay-submit lay-filter="formDemo">登 录</button>
+          <button class="layui-btn layui-btn-primary" onclick="toRegister()">注 册</button>
+        </div>
+      </div>
+    </form>
+
+  </div>
+
+
+  <script>
+
+    layui.use('form', function(){
+    var form = layui.form;
+    
+    //监听提交
+    form.on('submit(formDemo)', function(data){
+
+        $.ajax({
+          url: "/user/login",
+          type: "POST",
+          data: data.field,
+          success: function (res,status) {
+            console.log(res)
+            if(status==='success'){
+              layer.msg('登录成功！',{
+                icon: 1,
+                time: 1000
+              })
+              setTimeout(() => {
+                location.href='mapbox';
+              }, 1000);
+            }
+          },
+          error:function(error,status){
+            let msg=error.responseJSON.message;
+            layer.msg(msg||"登录失败！",{
+                icon: 2,
+                time: 2000
+              })
+          }
+        });
+
+        return false; 
+      });
+    });
+
+    function toRegister(){
+      location.href='register';
+    }
+  
+  </script>
+</html>

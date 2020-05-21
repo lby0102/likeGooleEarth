@@ -1,0 +1,73 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-04-20 10:56:42
+ * @LastEditTime: 2020-04-22 11:13:36
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \myTest\public\login.html
+ -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+
+    <script src="./javascripts/jquery-3.1.1.min.js"></script>
+
+    <style>
+      .item {
+        width: 300px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+      }
+
+      .label {
+        height: 100%;
+        width: 30%;
+        display: flex;
+        align-items: center;
+      }
+
+      .input {
+        width: 70%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="item">
+      <label for="" class="label">登录名：</label
+      ><input class="input" id="username" />
+    </div>
+    <div class="item">
+      <label for="" class="label">密码：</label
+      ><input class="input" id="password" />
+    </div>
+    <button id="login" οnclick="login()">登 陆</button>
+  </body>
+
+  <script>
+    document.getElementById("login").addEventListener("click", function () {
+      var username = $("#username").val();
+      var password = $("#password").val();
+      var data = { username: username, password: password };
+      $.ajax({
+        url: "/login",
+        type: "POST",
+        data: data,
+        success: function (res,status) {
+          if(status==='success'){
+            location.href='index';
+          }
+        },
+        error:function(error,status){
+            if(status==='success'){
+            location.href='login';
+          }
+        }
+      });
+    });
+  </script>
+</html>
